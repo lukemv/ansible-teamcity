@@ -12,7 +12,7 @@ Ansible > 2.2 is required to run the tasks included in this repo. See [Installat
 
 **Deployment Requirements:**
 
-You will need to provision at least 3 servers. A somewhat beefy computer running 3 virtual machines will suffice, for such a scenario the included `Vagrantfile` might provide some guidance. In a production scenario you would likely use a platform like AWS or GCE.
+You will need to provision at least 3 servers. All of these need to be Centos7, RHEL7+ or Amazon Linux. A somewhat beefy computer running 3 virtual machines will suffice, for such a scenario the included `Vagrantfile` might provide some guidance. In a production scenario you would likely use a platform like AWS or GCE.
 
 
 
