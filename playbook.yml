@@ -2,3 +2,8 @@
   become: True
   roles:
   - tcserver
+
+- hosts: db
+  become: True
+  roles:
+  - postgresql
