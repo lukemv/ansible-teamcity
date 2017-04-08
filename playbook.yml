@@ -14,3 +14,54 @@
     yum:
       name: /tmp/jdk-8u60-linux-x64.rpm
       state: present
+  - name: Set JAVA_HOME system-wide 
+    shell: echo export JAVA_HOME="$(which java)" > /etc/profile.d/javaenv.sh
+  - name: Set permissions on javaenv.sh
+    file:
+      path: /etc/profile.d/javaenv.sh
+      mode: 0755
+  - name: Create TeamCity Group
+    group:
+      name: teamcity 
+      state: present 
+  - name: Create Teamcity User
+    user:
+      name: teamcity 
+      comment: "Team City User"
+      group: teamcity 
+  - name: Download Teamcity Tarball
+    get_url:
+      url: "https://download.jetbrains.com/teamcity/TeamCity-10.0.5.tar.gz"
+      dest: /tmp/TeamCity-10.0.5.tar.gz
+  - name: Extract Teamcity Tarball
+    unarchive:
+      src: /tmp/TeamCity-10.0.5.tar.gz
+      dest: /opt
+      remote_src: True
+      creates: /opt/TeamCity
+  - name: Set TeamCity Directory permissions
+    file:
+      path: /opt/TeamCity
+      recurse: yes
+      owner: teamcity
+      group: teamcity
+  - name: Set TEAMCITY_HOME system-wide 
+    shell: echo export TEAM_CITY_HOME="/opt/TeamCity" > /etc/profile.d/teamcity.sh
+  - name: Set permissions on teamcity.sh
+    file:
+      path: /etc/profile.d/teamcity.sh
+      mode: 0755
+  - name: Copy TeamCity systemd file for server
+    template:
+      src: templates/teamcity-server.service.j2
+      dest: /etc/systemd/system/teamcity-server.service
+      owner: root
+      group: root 
+      mode: 0755
+  - name: Enable Teamcity server service
+    systemd:
+      name: teamcity-server
+      state: started
+      enabled: yes
+      masked: no
+      daemon_reload: yes

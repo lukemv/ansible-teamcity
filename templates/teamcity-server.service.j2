@@ -1,0 +1,14 @@
+[Unit]
+Description=TeamCity Server
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/opt/TeamCity/logs/teamcity.pid
+User=teamcity
+ExecStart=/opt/TeamCity/bin/teamcity-server.sh start
+ExecStop=/opt/TeamCity/bin/teamcity-server.sh stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
