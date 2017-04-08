@@ -55,6 +55,19 @@
     owner: root
     group: root 
     mode: 0755
+- name: Create BuildServer jdbc folder
+  file:
+    path: /home/teamcity/.BuildServer/lib/jdbc
+    state: directory
+    owner: teamcity
+    group: teamcity
+- name: Download JDBC Postgres driver
+  get_url:
+    url: https://jdbc.postgresql.org/download/postgresql-42.0.0.jre6.jar
+    dest: /home/teamcity/.BuildServer/lib/jdbc
+    owner: teamcity
+    group: teamcity
+    mode: 0755
 - name: Enable Teamcity server service
   systemd:
     name: teamcity-server
