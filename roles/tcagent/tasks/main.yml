@@ -1,0 +1,54 @@
+- name: Ensure that unzip is installed
+  yum:
+    name: unzip
+    state: present
+- name: Create TeamCity Group
+  group:
+    name: teamcity 
+    state: present 
+- name: Create Teamcity User
+  user:
+    name: teamcity 
+    comment: "Team City User"
+    group: teamcity 
+- name: Make TeamCity Directory
+  file:
+    path: /opt/TeamCity
+    state: directory
+- name: Download buildAgent.zip from TC Server
+  get_url:
+    url: 'http://{{tcserver}}:8111/update/buildAgent.zip'
+    dest: /tmp
+- name: Extract Teamcity Agent Tarball
+  unarchive:
+    src: /tmp/buildAgent.zip
+    dest: /opt/TeamCity
+    remote_src: True
+    creates: /opt/TeamCity/bin
+- name: Set TeamCity Directory permissions
+  file:
+    path: /opt/TeamCity
+    recurse: yes
+    owner: teamcity
+    group: teamcity
+- name: Copy buildAgent.properties template
+  template:
+    src: templates/buildAgent.properties.j2
+    dest: /opt/TeamCity/conf/buildAgent.properties
+    owner: teamcity
+    group: teamcity
+    mode: 0644
+- name: Copy TeamCity systemd file for agent 
+  template:
+    src: templates/teamcity-agent.service.j2
+    dest: /etc/systemd/system/teamcity-agent.service
+    owner: root
+    group: root 
+    mode: 0755
+- name: Enable Teamcity agent service
+  systemd:
+    name: teamcity-agent
+    state: started
+    enabled: yes
+    masked: no
+    daemon_reload: yes

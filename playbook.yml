@@ -1,9 +1,19 @@
 - hosts: tcserver 
   become: True
   roles:
+  - java8
   - tcserver
+
+- hosts: tcagent
+  become: True
+  roles:
+  - java8
+  - { role: 'tcagent',
+      tcserver: '10.10.10.133' }
 
 - hosts: db
   become: True
   roles:
-  - postgresql
+  - { role: 'postgresql', 
+      internal_network_cidr: '10.10.10.0/24',
+      teamcity_password: 'redacted' }

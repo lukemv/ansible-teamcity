@@ -1,0 +1,14 @@
+[Unit]
+Description=TeamCity Agent 
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/opt/TeamCity/logs/buildAgent.pid
+User=teamcity
+ExecStart=/opt/TeamCity/bin/agent.sh start
+ExecStop=/opt/TeamCity/bin/agent.sh stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

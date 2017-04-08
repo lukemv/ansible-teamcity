@@ -1,0 +1,15 @@
+- name: Download Oracle Java8 JDK RPM
+  get_url: 
+    url: "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm"
+    dest: /tmp/jdk-8u60-linux-x64.rpm
+    headers: "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
+- name: Install Oracle Java 
+  yum:
+    name: /tmp/jdk-8u60-linux-x64.rpm
+    state: present
+- name: Set JAVA_HOME system-wide 
+  shell: echo export JAVA_HOME="$(which java)" > /etc/profile.d/javaenv.sh
+- name: Set permissions on javaenv.sh
+  file:
+    path: /etc/profile.d/javaenv.sh
+    mode: 0755
