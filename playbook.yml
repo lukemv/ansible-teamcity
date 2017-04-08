@@ -5,3 +5,12 @@
     yum:
       name: net-tools
       state: present
+  - name: Download Oracle Java8 JDK RPM
+    get_url: 
+      url: "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm"
+      dest: /tmp/jdk-8u60-linux-x64.rpm
+      headers: "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
+  - name: Install Oracle Java 
+    yum:
+      name: /tmp/jdk-8u60-linux-x64.rpm
+      state: present
