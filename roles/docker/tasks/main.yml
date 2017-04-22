@@ -1,0 +1,22 @@
+- name: Run yum check-update # Handle non-zero exit codes
+  shell: 'yum check-update || test $? -eq 100'
+
+- name: Download the shell script
+  get_url:
+    url: "https://get.docker.com/"
+    dest: /tmp/docker-install.sh
+    mode: 0755
+
+- name: Execute the shell script
+  command: /tmp/docker-install.sh 
+
+- name: Ensure that docker runs at startup
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Ensure the teamcity user is in the docker group
+  user:
+    name: teamcity 
+    groups: docker 
