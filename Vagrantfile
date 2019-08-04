@@ -9,6 +9,8 @@ Vagrant.configure(2) do |config|
     db.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
     end
+   db.vm.provision "shell",
+    inline: "curl https://github.com/lukemv.keys >> /home/vagrant/.ssh/authorized_keys"
   end
 
   config.vm.define "tcserver" do |tcserver|
@@ -17,6 +19,8 @@ Vagrant.configure(2) do |config|
     tcserver.vm.provider "virtualbox" do |vb|
       vb.memory = "2096"
     end
+    tcserver.vm.provision "shell",
+      inline: "curl https://github.com/lukemv.keys >> /home/vagrant/.ssh/authorized_keys"
   end
 
   config.vm.define "tcagent" do |tcagent|
@@ -25,6 +29,8 @@ Vagrant.configure(2) do |config|
     tcagent.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
     end
+    tcagent.vm.provision "shell",
+      inline: "curl https://github.com/lukemv.keys >> /home/vagrant/.ssh/authorized_keys"
   end
 
 end
